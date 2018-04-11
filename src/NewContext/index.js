@@ -4,6 +4,7 @@ import ContextCompose  from './ContextCompose'
 const ThemeContext = React.createContext('light-default');
 const ColorContext = React.createContext('blue-default');
 const LanguageContext = React.createContext('en-default');
+//refs
 const ref = React.createRef();
 
 export default class Index extends React.Component {
@@ -28,6 +29,7 @@ export default class Index extends React.Component {
         const ThemeButton = withTheme(Button);
         const ThemeButtonWithRef = withThemeAndRef(Button);
         return (
+                // Compose 提供Provider
                 <ContextCompose
                     contexts={[
                         <ThemeContext.Provider value={this.state} />,
@@ -35,26 +37,14 @@ export default class Index extends React.Component {
                         <LanguageContext.Provider value={this.state.language} />
                     ]}
                 >
+                    {/* 正常的Consumer，包含事件 */}
                     <ThemedArea />
                     <OtherTextComponent />
+                    {/* HOC */}
                     <ThemeButton />
+                    {/* HOC && Refs */}
                     <ThemeButtonWithRef ref={ref}/>
-                    {/* <ThemeContext.Consumer>
-                        {
-                            theme => <div>ThemeContext: {theme}</div>
-                        }
-                    </ThemeContext.Consumer> */}
-                    <ColorContext.Consumer>
-                        {
-                            color => <div>colorContext: {color}</div>
-                        }
-                    </ColorContext.Consumer>
-                    <LanguageContext.Consumer>
-                        {
-                            language => <div>LanguageContext: {language}</div>
-                        }
-                    </LanguageContext.Consumer>
-                    {/* 提供Consumer */}
+                    {/* Compose 提供Consumer */}
                     <ContextCompose
                         contexts={[
                             ThemeContext,
