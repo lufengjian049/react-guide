@@ -34,3 +34,4 @@
       竞态 redux-observable
       [takeLatestAsyncResult](https://jsfiddle.net/Kpaxqin/qgktqtts/)
       
+      redux-combindreducer
