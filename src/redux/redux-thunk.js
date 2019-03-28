@@ -44,6 +44,17 @@ function createThunkMiddleware(extraArgument) {
     };
   }
 
+//   const chain = middlewares.map(middleware => middleware(middlewareAPI))
+//     dispatch = compose(...chain)(store.dispatch)
+
+// funcs.reduce((a, b) => (...args) => a(b(...args)))
+//[a,b,c] a(b(c(store.dispatch)))(action)
+// func.reducer((a,b) => {
+//     return (...args) => {
+//         return a(b(...args));
+//     }
+// })
+
 //中间件中dispatch也是经过enhanced的dispatch
 //action types
 const GET_DATA = 'GET_DATA',
@@ -83,3 +94,18 @@ const reducer = function(oldState, action) {
         return errorState;
     }
 }
+export default ({dispatch, getState}) => next => action => {
+    if(!Array.isArray(action)) {
+      return next(action);
+    }
+  
+    return action.reduce( (result, currAction) => {
+      return result.then(() => {
+        if (!currAction) { return Promise.resolve(); }
+  
+        return Array.isArray(currAction) ?
+          Promise.all(currAction.map(item => dispatch(item))) :
+          dispatch(currAction);
+      });
+    }, Promise.resolve());
+  }
